@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VirtualTrafficLightCoreLibrary
 {
-    public abstract class Channel<DataTrasferObject> : IAsyncDisposable, IDisposable 
+    public abstract class Channel<SendingDataTrasferObject, ReceivingataTrasferObject> : IAsyncDisposable, IDisposable 
     {
         protected bool _isDisposed = false;
         protected bool _isClosed = false;
@@ -15,7 +15,7 @@ namespace VirtualTrafficLightCoreLibrary
         protected readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         protected WebSocket _webSocket;
 
-        protected Func<DataTrasferObject, string, Task> _messageCallback;
+        protected Func<ReceivingataTrasferObject, string, Task> _messageCallback;
 
         protected Task _receiveLoopTask;
 
@@ -28,7 +28,7 @@ namespace VirtualTrafficLightCoreLibrary
             _receiveLoopTask = Task.Run(ReceiveLoop, _cancellationTokenSource.Token);
         }
 
-        public void OnMessage(Func<DataTrasferObject, string, Task> callbackHandler)
+        public void OnMessage(Func<ReceivingataTrasferObject, string, Task> callbackHandler)
             => _messageCallback = callbackHandler;
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace VirtualTrafficLightCoreLibrary
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task SendAsync(DataTrasferObject message)
+        public async Task SendAsync(SendingDataTrasferObject message)
         {
             if (_isClosed)
             {
@@ -128,9 +128,9 @@ namespace VirtualTrafficLightCoreLibrary
             }
         }
 
-        public abstract byte[] Serialize(DataTrasferObject data);
+        public abstract byte[] Serialize(SendingDataTrasferObject data);
 
-        public abstract DataTrasferObject Deserialize(byte[] data);
+        public abstract ReceivingataTrasferObject Deserialize(byte[] data);
 
 
         #region Dispose
