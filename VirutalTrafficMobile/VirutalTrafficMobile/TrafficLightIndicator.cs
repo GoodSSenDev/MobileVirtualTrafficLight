@@ -14,13 +14,15 @@ namespace VirutalTrafficMobile
 
         }
 
-        public static TrafficLightIndicator Manager
+        public static TrafficLightIndicator Indicator
         {
             get
             {
                 return _lazy.Value;
             }
         }
+
+
 
     }
 }
