@@ -109,7 +109,6 @@ namespace VirtualTrafficLightCoreLibrary
             }
         }
 
-
         /// <summary>
         /// Close this channel including attached socket 
         /// </summary>
@@ -128,8 +127,18 @@ namespace VirtualTrafficLightCoreLibrary
             }
         }
 
+        /// <summary>
+        /// Serializes SendingDTO to byte[]
+        /// </summary>
+        /// <param name="data">SendingDataTrasferObject</param>
+        /// <returns>Sending byte[]</returns>
         public abstract byte[] Serialize(SendingDataTrasferObject data);
 
+        /// <summary>
+        /// Deserialzing byte[] to ReceivingataTrasferObject
+        /// </summary>
+        /// <param name="data">Received byte[]</param>
+        /// <returns>ReceivingataTrasferObject</returns>
         public abstract ReceivingataTrasferObject Deserialize(byte[] data);
 
 

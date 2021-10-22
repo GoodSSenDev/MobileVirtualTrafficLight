@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -29,12 +30,37 @@ namespace VirtualTrafficLightCoreLibrary.Client
 
         public override IndiationDTO Deserialize(byte[] data)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _receiveStream.Position = 1;
+                _receiveStream.Write(data);
+                _receiveStream.Position = 1;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Something went wrong while Deserializing IndiationDTO package: {ex}");
+            }
+
+            return new IndiationDTO(_receiveReader.ReadInt32(), _receiveReader.ReadInt32());
         }
 
         public override byte[] Serialize(VehicleDTO data)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _sendStream.Position = 1;
+                _sendWriter.Write(data.Speed);
+                _sendWriter.Write(data.ClosestLane);
+                _sendWriter.Write(data.Distance);
+                _sendWriter.Write(data.IsDistanceShrinking);
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Something went wrong while Serialize IndicationDTO package: {ex}");
+            }
+
+            return _sendStream.ToArray();
         }
     }
 }

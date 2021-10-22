@@ -19,11 +19,17 @@ namespace VirtualTrafficLightCoreLibrary.Common
             SpecialCommand = specialCommand;
             TrafficIndication = trafficIndication;
         }
+
+        public IndiationDTO(int specialCommand, int trafficIndication)
+        {
+            SpecialCommand = specialCommand;
+            TrafficIndication = (TrafficLightColor)trafficIndication;
+        }
     }
 
 
     /// <summary>
-    /// Enum of TrafficLight Colour no Yellow Since the red sign can work was yellow -> red
+    /// Enum of TrafficLight Color, Yellow is not included, Since the red sign can work was yellow -> red
     /// </summary>
     public enum TrafficLightColor
     {

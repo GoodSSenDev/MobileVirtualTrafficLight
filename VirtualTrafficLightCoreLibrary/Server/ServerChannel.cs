@@ -13,7 +13,7 @@ namespace VirtualTrafficLightCoreLibrary.Server
         /// <summary>
         /// Memoery stream for sending messages 
         /// </summary>
-        readonly MemoryStream _sendStream = new MemoryStream(Marshal.SizeOf<IndiationDTO>());
+        readonly MemoryStream _sendStream = new MemoryStream(8);
         readonly BinaryWriter _sendWriter;
 
         /// <summary>
