@@ -4,6 +4,9 @@ using System.Text;
 
 namespace VirtualTrafficLightCoreLibrary.Common
 {
+    /// <summary>
+    /// Represent a message package that can be used to send from the vehicle to the server
+    /// </summary>
     public readonly struct VehicleDTO
     {
         public double Speed { get; }
