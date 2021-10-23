@@ -26,6 +26,8 @@ namespace VirtualTrafficLightServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ChannelManager>(provider => _channelManager);
+            //start operating virtual traffic light
+            CrossIntersection.Intersection.StartOperate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

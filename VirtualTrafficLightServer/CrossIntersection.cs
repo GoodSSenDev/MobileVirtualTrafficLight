@@ -40,7 +40,7 @@ namespace VirtualTrafficLightServer
         /// <param name="channel"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<bool> AddVehicleOnLane(ServerChannel channel, VehicleDTO message)
+        public async Task<bool> AddVehicleOnLaneAsync(ServerChannel channel, VehicleDTO message)
         {
             if (message.ClosestLane > _lanes.Length)
                 return false;
@@ -70,7 +70,7 @@ namespace VirtualTrafficLightServer
         /// <param name="channelPath"></param>
         /// <param name="lane"></param>
         /// <returns>return flase if cannot removing false</returns>
-        public async Task<bool> RemoveVehicleOnLane(string channelPath,int lane)
+        public async Task<bool> RemoveVehicleOnLaneAsync(string channelPath,int lane)
         {
             if (lane <= 0 || lane > _lanes.Length)
                 return false;

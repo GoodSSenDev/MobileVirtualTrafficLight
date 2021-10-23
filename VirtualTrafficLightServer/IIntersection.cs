@@ -10,9 +10,9 @@ namespace VirtualTrafficLightServer
     public interface IIntersection
     {
 
-        public Task<bool> AddVehicleOnLane(ServerChannel channel,VehicleDTO message);
+        public Task<bool> AddVehicleOnLaneAsync(ServerChannel channel,VehicleDTO message);
 
-        public Task<bool> RemoveVehicleOnLane(string channelPath, int lane);
+        public Task<bool> RemoveVehicleOnLaneAsync(string channelPath, int lane);
 
         public void StartOperate();
 

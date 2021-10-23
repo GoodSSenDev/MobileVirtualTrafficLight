@@ -18,6 +18,7 @@ namespace VirtualTrafficLightServer
         public event EventHandler? ChannelAccepted;
         public event EventHandler? ChannelClosed;
 
+        private MessageHandler _messageHandler = new MessageHandler();
 
         /// <summary>
         /// Tries adding new ServerChannel into channels' concurrent dictionary 
@@ -39,7 +40,8 @@ namespace VirtualTrafficLightServer
             };
             channel.ChannelPath = uri;
             channel.Attach(webSocket);
-            
+
+            _messageHandler.Bind(channel);
             ChannelAccepted?.Invoke(this, EventArgs.Empty);
         }
     }

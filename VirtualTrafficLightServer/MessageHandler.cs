@@ -10,7 +10,7 @@ namespace VirtualTrafficLightServer
     {
 
         /// <summary>
-        ///  Bind the Channel so when they gets the message they can wo
+        /// Bind the Channel so when Channel gets message this can get the flow of the messages handle.
         /// </summary>
         /// <param name="channel">Channel</param>
         public void Bind(ServerChannel channel)
@@ -18,14 +18,16 @@ namespace VirtualTrafficLightServer
 
                 if(m.Distance <= 100)
                 {
-                    //add lane
-                    //return 
+                    channel.LaneNumber = m.ClosestLane;
+                    await CrossIntersection.Intersection.AddVehicleOnLaneAsync(channel,m);
+                    return;
                 }
-
 
                 if (m.IsDistanceShrinking == false)
                 {
-                    //remove
+                    await CrossIntersection.Intersection.RemoveVehicleOnLaneAsync(channelPath,channel.LaneNumber);
+                    await channel.CloseAsync();
+                    return;
                 }
 
             });
