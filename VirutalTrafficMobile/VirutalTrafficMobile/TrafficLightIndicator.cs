@@ -51,6 +51,11 @@ namespace VirutalTrafficMobile
             _operationLoopTask = Task.Run(OperationLoop, _cancellationTokenSource.Token);
         }
 
+        public void StopOperation()
+        {
+            IsOperating = false;
+        }
+
         public async Task OperationLoop()
         {
             try
