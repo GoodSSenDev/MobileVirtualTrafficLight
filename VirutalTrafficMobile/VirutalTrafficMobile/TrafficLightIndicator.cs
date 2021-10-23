@@ -21,6 +21,9 @@ namespace VirutalTrafficMobile
         private int _lastDistance;
         private ClientChannel _channel;
 
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private Task _operationLoopTask;
+
         /// <summary>
         /// Delegate for when Message arrived
         /// </summary>
@@ -36,6 +39,31 @@ namespace VirutalTrafficMobile
             get
             {
                 return _lazy.Value;
+            }
+        }
+
+        /// <summary>
+        /// Start the Operation Loop
+        /// </summary>
+        public void StartOperation()
+        {
+            IsOperating = true;
+            _operationLoopTask = Task.Run(OperationLoop, _cancellationTokenSource.Token);
+        }
+
+        public async Task OperationLoop()
+        {
+            try
+            {
+                while (!_cancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    await Operation();
+                }
+            }
+            catch (Exception e)//need to be considered
+            {
+                IsOperating = false;
+                await _channel.CloseAsync(e);
             }
         }
 
@@ -55,17 +83,29 @@ namespace VirutalTrafficMobile
             }
             var lane = GetLaneNumber(trafficLightInfo.LaneAngles, trafficLightInfo.Latitude, trafficLightInfo.Longitude);
 
-            await SendLocationInfo(lane);      
+            await SendLocationInfo(lane, trafficLightInfo);      
         }
 
-        private async Task SendLocationInfo(int lane)
+        private async Task SendLocationInfo(int lane, TrafficLight currentTLInfo)
         {
             if (_lastlocation == null)
                 return;
             var sendingDTO = new VehicleDTO(Convert.ToDouble(_lastlocation.Speed), lane, _lastDistance, true);
 
             await _channel.SendAsync(sendingDTO);
-            
+            await Task.Delay(2000);
+
+            while(!_channel.IsClosed && IsOperating)
+            {
+                var location = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.High));
+                var distance = Location.CalculateDistance(location, currentTLInfo.Location, DistanceUnits.Kilometers) / 1000;
+                var isDistanceShrinking = !((distance - _lastDistance) > 20);//if distance is increasing(more than 20 meter per 2 secs) than it is false
+                var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, (int)distance, isDistanceShrinking);
+
+                await _channel.SendAsync(VehicleDTO);
+
+                await Task.Delay(2000);
+            }
         }
 
         /// <summary>

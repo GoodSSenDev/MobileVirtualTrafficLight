@@ -9,7 +9,7 @@ namespace VirtualTrafficCoreLibrary
     {
         protected bool _isDisposed = false;
         protected bool _isClosed = false;
-
+        
         protected readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         protected WebSocket _webSocket;
 
@@ -18,6 +18,13 @@ namespace VirtualTrafficCoreLibrary
         protected Task _receiveLoopTask;
 
         public event EventHandler Closed;
+        public bool IsClosed 
+        { 
+            get
+            {
+                return _isClosed;
+            } 
+        }
         public string ChannelPath { get; set; } = string.Empty;
 
         public void Attach(WebSocket webSocket)
