@@ -1,21 +1,33 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace VirtualTrafficLightServer
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        ChannelManager _channelManager = new ChannelManager();
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ChannelManager>(provider => _channelManager);
+            //start operating virtual traffic light
+            CrossIntersection.Intersection.StartOperate();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,15 +38,35 @@ namespace VirtualTrafficLightServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
+            app.UseWebSockets();
+
+            app.Use(async (context, next) =>
             {
-                endpoints.MapGet("/", async context =>
+
+                if (context.WebSockets.IsWebSocketRequest)
                 {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                    using (WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync())
+                    {
+
+                        var sourceFinishedTcs = new TaskCompletionSource<bool>();
+                        _channelManager.AddConnection(webSocket, context.Request.Path, sourceFinishedTcs);
+
+                        //to keep this pipeline running for the websocket.
+                        await sourceFinishedTcs.Task;
+                    }
+                }
+                else
+                {
+                    //if not websocket request than it is bad Request
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                }
+
             });
+
         }
     }
 }

@@ -22,6 +22,8 @@ namespace VirtualTrafficLightCoreLibrary.Server
         readonly MemoryStream _receiveStream = new MemoryStream(Marshal.SizeOf<VehicleDTO>());
         readonly BinaryReader _receiveReader;
 
+        public int LaneNumber { get; set; } = 0;
+
         public ServerChannel()
         {
             _sendWriter = new BinaryWriter(_sendStream);
