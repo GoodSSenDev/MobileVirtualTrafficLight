@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VirtualTrafficLightCoreLibrary\VirtualTrafficLightCoreLibrary.csproj" />
+    <ProjectReference Include="..\VirtualTrafficCoreLibrary\VirtualTrafficCoreLibrary.csproj" />
   </ItemGroup>
 
 </Project>

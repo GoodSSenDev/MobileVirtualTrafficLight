@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
-using VirtualTrafficLightCoreLibrary.Server;
+using VirtualTrafficCoreLibrary.Server;
 
 namespace VirtualTrafficLightServer
 {
