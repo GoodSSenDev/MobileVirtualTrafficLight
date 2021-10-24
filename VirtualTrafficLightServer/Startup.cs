@@ -26,6 +26,7 @@ namespace VirtualTrafficLightServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ChannelManager>(provider => _channelManager);
+            services.AddControllers();
             //start operating virtual traffic light
             CrossIntersection.Intersection.StartOperate();
         }
@@ -41,6 +42,8 @@ namespace VirtualTrafficLightServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseWebSockets();
 

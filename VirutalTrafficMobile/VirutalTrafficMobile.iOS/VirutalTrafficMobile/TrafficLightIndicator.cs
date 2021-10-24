@@ -28,7 +28,6 @@ namespace VirutalTrafficMobile
         /// Delegate for when Message arrived
         /// </summary>
         public Action<IndiationDTO> OnMessage { get; set; }
-        public Action OnChannelClosing { get; set; }
 
         private TrafficLightIndicator()
         {
@@ -106,7 +105,7 @@ namespace VirutalTrafficMobile
             while(!_channel.IsClosed && IsOperating)
             {
                 var location = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.High));
-                var distance = Location.CalculateDistance(location, currentTLInfo.Location, DistanceUnits.Kilometers) * 1000;
+                var distance = Location.CalculateDistance(location, currentTLInfo.Location, DistanceUnits.Kilometers) / 1000;
                 var isDistanceShrinking = !((distance - _lastDistance) > 20);//if distance is increasing(more than 20 meter per 2 secs) than it is false
                 var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, (int)distance, isDistanceShrinking);
 
@@ -155,7 +154,7 @@ namespace VirutalTrafficMobile
                 
                 for(int i = 0; i < GetAroundTrafficLights.TrafficLights.Count; i++)
                 {
-                    var distanceMeter = Location.CalculateDistance(location,GetAroundTrafficLights.TrafficLights[i].Location,DistanceUnits.Kilometers)*1000;
+                    var distanceMeter = Location.CalculateDistance(location,GetAroundTrafficLights.TrafficLights[i].Location,DistanceUnits.Kilometers)/1000;
                     if (distanceMeter <= 100)
                     {
                         _lastlocation = location;
@@ -184,16 +183,12 @@ namespace VirutalTrafficMobile
                 {
                     OnMessage?.Invoke(m);
                 });
-                _channel.Closed += (s, e) =>
-                {
-                    OnChannelClosing?.Invoke();
-                };
 
                 return true;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Exception occured on connecting {serverPath}:\n RequestConnection: {ex.Message}");
+                Debug.WriteLine("Exception occured on connecting {uri}:\n RequestConnection: {ex.Message}", serverPath, ex.Message);
                 return false;
             }
         }

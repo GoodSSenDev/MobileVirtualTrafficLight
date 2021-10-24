@@ -49,7 +49,8 @@ namespace VirtualTrafficCoreLibrary
             }
             try
             {
-                await _webSocket.SendAsync(new ArraySegment<byte>(Serialize(message))
+                var bytes = Serialize(message);
+                await _webSocket.SendAsync(new ArraySegment<byte>(bytes)
                     , WebSocketMessageType.Text,
                     true, _cancellationTokenSource.Token).ConfigureAwait(false);
 
@@ -72,7 +73,7 @@ namespace VirtualTrafficCoreLibrary
             {
                 while (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
-                    var receiveBuffer = new byte[1024 * 4];
+                    var receiveBuffer = new byte[50];
                     var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), _cancellationTokenSource.Token);
                     if (result.MessageType == WebSocketMessageType.Text)
                     {

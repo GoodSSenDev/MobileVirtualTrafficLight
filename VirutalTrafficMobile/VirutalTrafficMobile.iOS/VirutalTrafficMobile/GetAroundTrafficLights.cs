@@ -49,17 +49,13 @@ namespace VirutalTrafficMobile
 
         public bool GetTrafficLightInfoFromConfigFile()
         {
-            //some reason reletive path doesnot work (I think due to the visual studio's Xamarin's project bug)
-            //var path = Directory.GetCurrentDirectory() + "\\Traffic.txt";
+            var path = Directory.GetCurrentDirectory() + "\\TrafficLightInfos.txt";
 
             try
             {
-                //var fileStrings = File.ReadAllLines(path);
-                var fileStrings = new string[] {
-                    "-36.8680954528 174.753720021",
-                    "0 90 180 270",
-                    "ws://192.168.0.165:45457/"};
-                    for (int i = 0; i < fileStrings.Length;)
+                var fileStrings = File.ReadAllLines(path);
+
+                for (int i = 0; i < fileStrings.Length;)
                 {
                     var coordinates = fileStrings[i].Trim().Split(' ');
                     var laneAngles = fileStrings[i+1].Trim().Split(' ');

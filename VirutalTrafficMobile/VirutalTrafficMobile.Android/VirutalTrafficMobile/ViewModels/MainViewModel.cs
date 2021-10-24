@@ -60,7 +60,6 @@ namespace VirutalTrafficMobile.ViewModels
         {
             GetAroundTrafficLights.Setting.GetTrafficLightInfoFromConfigFile();
             TrafficLightIndicator.Indicator.OnMessage = HandleMessage;
-            TrafficLightIndicator.Indicator.OnChannelClosing = ColorChangeWhenClose;
         }
 
         private void HandleMessage(IndiationDTO message)
@@ -71,11 +70,6 @@ namespace VirutalTrafficMobile.ViewModels
                 CircleColour = "green";
 
             ReceivedMessage = $"Received Message TrafficLightColor: {message.TrafficIndication}";
-        }
-        private void ColorChangeWhenClose()
-        {
-            CircleColour = "grey";
-            ReceivedMessage = $"Received Message channel closed";
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

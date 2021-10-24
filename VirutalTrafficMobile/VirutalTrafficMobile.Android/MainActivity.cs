@@ -25,5 +25,6 @@ namespace VirutalTrafficMobile.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+
     }
 }

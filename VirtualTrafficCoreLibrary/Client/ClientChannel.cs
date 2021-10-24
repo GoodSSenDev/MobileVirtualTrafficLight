@@ -20,12 +20,12 @@ namespace VirtualTrafficCoreLibrary.Client
         /// Memoery stream for reading messages 
         /// </summary>
         readonly MemoryStream _receiveStream = new MemoryStream(Marshal.SizeOf<IndiationDTO>());
-        readonly BinaryReader _receiveReader;
+        readonly BinaryReaderReverse _receiveReader;
 
         public ClientChannel()
         {
             _sendWriter = new BinaryWriter(_sendStream);
-            _receiveReader = new BinaryReader(_receiveStream);
+            _receiveReader = new BinaryReaderReverse(_receiveStream);
         }
 
         public override IndiationDTO Deserialize(byte[] data)
