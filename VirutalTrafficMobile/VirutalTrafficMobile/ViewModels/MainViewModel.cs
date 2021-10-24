@@ -75,6 +75,7 @@ namespace VirutalTrafficMobile.ViewModels
         }
         private void ColorChangeWhenClose()
         {
+            CircleColour = new SolidColorBrush(Color.Gray);
             ReceivedMessage = $"Received Message channel closed";
         }
 

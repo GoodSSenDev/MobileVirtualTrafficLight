@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace VirtualTrafficCoreLibrary
         protected Func<ReceivingataTrasferObject, string, Task> _messageCallback;
 
         protected Task _receiveLoopTask;
-
+        protected string _channelType = "";
         public event EventHandler Closed;
         public bool IsClosed 
         { 
@@ -57,6 +58,7 @@ namespace VirtualTrafficCoreLibrary
             }
             catch (Exception e)
             {
+                Debug.WriteLine($" in Send{e}");
                 return;
             }
         }
@@ -73,6 +75,7 @@ namespace VirtualTrafficCoreLibrary
             {
                 while (!_cancellationTokenSource.Token.IsCancellationRequested)
                 {
+                    var channelType = _channelType;
                     var receiveBuffer = new byte[50];
                     var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), _cancellationTokenSource.Token);
                     if (result.MessageType == WebSocketMessageType.Text)

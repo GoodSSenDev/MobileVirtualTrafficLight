@@ -24,6 +24,7 @@ namespace VirtualTrafficCoreLibrary.Client
 
         public ClientChannel()
         {
+            _channelType = "Client";
             _sendWriter = new BinaryWriter(_sendStream);
             _receiveReader = new BinaryReader(_receiveStream);
         }
