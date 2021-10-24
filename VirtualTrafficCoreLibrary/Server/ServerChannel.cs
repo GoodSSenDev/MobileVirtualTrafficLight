@@ -13,6 +13,7 @@ namespace VirtualTrafficCoreLibrary.Server
 {
     public class ServerChannel : Channel<IndiationDTO,VehicleDTO>
     {
+        
         /// <summary>
         /// Memoery stream for sending messages 
         /// </summary>
@@ -29,6 +30,7 @@ namespace VirtualTrafficCoreLibrary.Server
 
         public ServerChannel()
         {
+            _channelType = "Server";
             _sendWriter = new BinaryWriter(_sendStream);
             _receiveReader = new BinaryReader(_receiveStream);
         }

@@ -71,7 +71,6 @@ namespace VirutalTrafficMobile
             catch (Exception e)//need to be considered
             {
                 IsOperating = false;
-                await _channel.CloseAsync(e);
             }
         }
 
@@ -103,16 +102,20 @@ namespace VirutalTrafficMobile
             await _channel.SendAsync(sendingDTO);
             await Task.Delay(2000);
 
-            while(!_channel.IsClosed && IsOperating)
+            while((!_channel.IsClosed) && IsOperating)
             {
                 var location = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.High));
                 var distance = Location.CalculateDistance(location, currentTLInfo.Location, DistanceUnits.Kilometers) * 1000;
                 var isDistanceShrinking = !((distance - _lastDistance) > 20);//if distance is increasing(more than 20 meter per 2 secs) than it is false
-                var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, -1, isDistanceShrinking);
+                if(!isDistanceShrinking)
+                {
+                    var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, 500, isDistanceShrinking);
 
-                await _channel.SendAsync(VehicleDTO);
+                    await _channel.SendAsync(VehicleDTO);
+                }
 
-                await Task.Delay(2000);
+
+                await Task.Delay(5000);
             }
         }
 
