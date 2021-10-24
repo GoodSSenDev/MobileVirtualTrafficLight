@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using VirtualTrafficCoreLibrary.Common;
+using Xamarin.Forms;
 
 namespace VirutalTrafficMobile.ViewModels
 {
@@ -11,10 +12,10 @@ namespace VirutalTrafficMobile.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private string _circleColour="grey";
+        private Brush _circleColour = new SolidColorBrush(Color.Gray);
         private string _receivedMessage;
         private bool _isSwitchOn;
-        public string CircleColour 
+        public Brush CircleColour 
         {  
             get { return _circleColour; }
             set
@@ -66,15 +67,14 @@ namespace VirutalTrafficMobile.ViewModels
         private void HandleMessage(IndiationDTO message)
         {
             if (message.TrafficIndication == TrafficLightColor.RED)
-                CircleColour = "red";
+                CircleColour = new SolidColorBrush(Color.Red);
             if (message.TrafficIndication == TrafficLightColor.GREEN)
-                CircleColour = "green";
+                CircleColour = new SolidColorBrush(Color.Green);
 
             ReceivedMessage = $"Received Message TrafficLightColor: {message.TrafficIndication}";
         }
         private void ColorChangeWhenClose()
         {
-            CircleColour = "grey";
             ReceivedMessage = $"Received Message channel closed";
         }
 

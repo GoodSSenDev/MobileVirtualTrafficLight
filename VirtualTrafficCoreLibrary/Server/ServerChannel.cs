@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using VirtualTrafficCoreLibrary.Common;
 
 namespace VirtualTrafficCoreLibrary.Server
@@ -20,23 +23,23 @@ namespace VirtualTrafficCoreLibrary.Server
         /// Memoery stream for reading messages 
         /// </summary>
         readonly MemoryStream _receiveStream = new MemoryStream(Marshal.SizeOf<VehicleDTO>());
-        readonly BinaryReaderReverse _receiveReader;
+        readonly BinaryReader _receiveReader;
 
         public int LaneNumber { get; set; } = 0;
 
         public ServerChannel()
         {
             _sendWriter = new BinaryWriter(_sendStream);
-            _receiveReader = new BinaryReaderReverse(_receiveStream);
+            _receiveReader = new BinaryReader(_receiveStream);
         }
 
         public override VehicleDTO Deserialize(byte[] data)
         {
             try
             {
-                _receiveStream.Position = 1;
+                _receiveStream.Position = 0;
                 _receiveStream.Write(data);
-                _receiveStream.Position = 1;
+                _receiveStream.Position = 0;
             }
             catch(Exception ex)
             {
@@ -54,7 +57,7 @@ namespace VirtualTrafficCoreLibrary.Server
         {
             try
             {
-                _sendStream.Position = 1;
+                _sendStream.Position = 0;
                 _sendWriter.Write(data.SpecialCommand);
                 _sendWriter.Write((int)data.TrafficIndication);
 

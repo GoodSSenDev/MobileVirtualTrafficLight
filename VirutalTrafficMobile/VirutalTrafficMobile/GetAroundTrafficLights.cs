@@ -58,7 +58,7 @@ namespace VirutalTrafficMobile
                 var fileStrings = new string[] {
                     "-36.8680954528 174.753720021",
                     "0 90 180 270",
-                    "ws://192.168.0.165:45457/"};
+                    "ws://192.168.0.165:45459/"};
                     for (int i = 0; i < fileStrings.Length;)
                 {
                     var coordinates = fileStrings[i].Trim().Split(' ');

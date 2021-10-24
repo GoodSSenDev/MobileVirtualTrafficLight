@@ -16,7 +16,7 @@ namespace VirtualTrafficLightServer
         public void Bind(ServerChannel channel)
             => channel.OnMessage(async (m, channelPath) => {
 
-                if(m.Distance <= 100)
+                if(m.Distance <= 100 && m.Distance >=0)
                 {
                     channel.LaneNumber = m.ClosestLane;
                     await CrossIntersection.Intersection.AddVehicleOnLaneAsync(channel,m);

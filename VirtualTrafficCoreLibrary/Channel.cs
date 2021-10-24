@@ -118,7 +118,7 @@ namespace VirtualTrafficCoreLibrary
         /// <summary>
         /// Close this channel including attached socket 
         /// </summary>
-        public async Task CloseAsync()
+        public virtual async Task CloseAsync()
         {
             if (!_isClosed)
             {

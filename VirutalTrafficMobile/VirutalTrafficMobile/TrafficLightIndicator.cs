@@ -108,7 +108,7 @@ namespace VirutalTrafficMobile
                 var location = await Geolocation.GetLocationAsync(new GeolocationRequest(GeolocationAccuracy.High));
                 var distance = Location.CalculateDistance(location, currentTLInfo.Location, DistanceUnits.Kilometers) * 1000;
                 var isDistanceShrinking = !((distance - _lastDistance) > 20);//if distance is increasing(more than 20 meter per 2 secs) than it is false
-                var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, (int)distance, isDistanceShrinking);
+                var VehicleDTO = new VehicleDTO(Convert.ToDouble(location.Speed), lane, -1, isDistanceShrinking);
 
                 await _channel.SendAsync(VehicleDTO);
 
