@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using VirtualTrafficLightCoreLibrary.Common;
-using VirtualTrafficLightCoreLibrary.Server;
+using VirtualTrafficCoreLibrary.Common;
+using VirtualTrafficCoreLibrary.Server;
 
 namespace VirtualTrafficLightServer
 {
